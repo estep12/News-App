@@ -3,7 +3,6 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var logger = require("morgan");
 var request = require("request");
-// var axios = require("axios");
 var cheerio = require("cheerio");
 
 // Require all models
@@ -19,13 +18,20 @@ app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+// Set Handlebars
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/newsapp");
 
 
-// app.get("/", (req, res) => {
-//     res.send("Hello World")
-// });
+app.get("/", (req, res) => {
+    res.render("index")
+});
+
 
 app.get("/scrape", (req, res) => {
     request("https://www.vox.com/", (error, res, html) => {
@@ -53,7 +59,39 @@ app.get("/scrape", (req, res) => {
     res.send("Scrape Complete")
 });
 
+app.get("/articles", (req, res) => {
+    db.Article.find({})
+        .then((dbArticle) => {
+            res.json(dbArticle)
+        })
+        .catch((err) => {
+            res.json(err)
+        });
+});
 
+app.get("/articles/:id", (req, res) => {
+    db.Article.findOne({ _id: req.params.id })
+        .populate("notes")
+        .then((dbArticle) => {
+            res.json(dbArticle)
+        })
+        .catch((err) => {
+            res.json(err)
+        });
+});
+
+app.post("/articles/:id", (req, res) => {
+    db.Notes.create(req.body)
+        .then((dbNote) => {
+            return db.Article.findOneAndUpdate({ _id: req.params.id}, { notes: dbNotes._id}, { new: true});
+        })
+        .then((dbArticle) => {
+            res.json(dbArticle)
+        })
+        .catch((err) => {
+            res.json(err)
+        });
+});
 
 
 
