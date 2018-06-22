@@ -1,3 +1,18 @@
+.jumbotron {
+    background-color: #FEF14F;
+    margin-left: 5%;
+    margin-right: 5%;
+    border: yellow;
+    border-radius: 10px;
+}
+
 #headline {
     text-align: center;
+    font-weight: bolder;
+}
+
+p {
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
 }
