@@ -4,7 +4,7 @@ $.getJSON("/articles", (data) => {
         + data[i]._id + "'>" 
         + data[i].title + "<br />" 
         + data[i].link + 
-        "<button class = 'button button-success'> Save </button>" +
+        "<button class = 'button button-success' data-id="+ data[i]._id +"> Save </button>" +
         "</p>");
     }
 });
