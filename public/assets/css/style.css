@@ -1,14 +1,29 @@
 .jumbotron {
     background-color: #FEF14F;
-    margin-left: 5%;
-    margin-right: 5%;
+    /* margin-left: 5%;
+    margin-right: 5%; */
     border: yellow;
-    border-radius: 10px;
+    /* border-radius: 10px; */
 }
 
 #headline {
     text-align: center;
     font-weight: bolder;
+}
+
+.btn-success {
+    position: absolute;
+    
+    /* top: 20px;
+    right: 20px; */
+}
+
+#buttonDanger {
+    color: white;
+}
+
+.clear {
+    margin-left: 10px;
 }
 
 p {

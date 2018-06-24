@@ -2,9 +2,10 @@ $.getJSON("/articles", (data) => {
     for (i = 0; i < data.length; i++) {
         $("#card-body").append("<p data-id='"
             + data[i]._id + "'>"
-            + data[i].title + "<br />"
+            + data[i].title + 
+            "<button class = 'btn btn-success' data-id=" + data[i]._id + "> Save </button>" + "<br />"
+            + data[i].summary + "<br />"
             + data[i].link +
-            "<button class = 'button button-success' data-id=" + data[i]._id + "> Save </button>" +
             "</p>");
     }
 });
@@ -45,7 +46,7 @@ $(document).on("click", "p", function () {
 
 
 $(document).on("click", "#savenote", function() {
-    // Grab the id associated with the article from the submit button
+    
     var thisId = $(this).attr("data-id");
   
     // Run a POST request to change the note, using what's entered in the inputs
@@ -53,21 +54,17 @@ $(document).on("click", "#savenote", function() {
       method: "POST",
       url: "/articles/" + thisId,
       data: {
-        // Value taken from title input
         title: $("#titleinput").val(),
-        // Value taken from note textarea
         body: $("#bodyinput").val()
       }
     })
-      // With that done
+      
       .then(function(data) {
-        // Log the response
         console.log(data);
-        // Empty the notes section
         $("#notes").empty();
       });
   
-    // Also, remove the values entered in the input and textarea for note entry
+   
     $("#titleinput").val("");
     $("#bodyinput").val("");
   });

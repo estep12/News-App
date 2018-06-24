@@ -37,20 +37,18 @@ app.get("/scrape", (req, res) => {
     request("https://www.vox.com/", (error, res, html) => {
         var $ = cheerio.load(html);
         var result = {};
-
+        
         $("h2").each(function (i, element) {
 
             result.title = $(this).children("a").text();
-            result.sum = $(this).children("p").text();
+            result.summary = $(this).children("p").text();
             result.link = $(this).children("a").attr("href");
-
+            
             db.Article.create(result)
                 .then(function (dbArticle) {
-                    // View the added result in the console
                     console.log(dbArticle);
                 })
                 .catch(function (err) {
-                    // If an error occurred, send it to the client
                     return res.json(err);
                 });
         });
