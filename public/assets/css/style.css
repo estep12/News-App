@@ -12,7 +12,7 @@
 }
 
 .btn-success {
-    position: absolute;
+    /* position: absolute; */
     
     /* top: 20px;
     right: 20px; */
@@ -32,4 +32,8 @@ p {
     background-color: rgb(86, 86, 94);
     color: white;
     border-color: black;
+}
+
+#notes {
+    /* float: right; */
 }

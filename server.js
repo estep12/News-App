@@ -24,38 +24,50 @@ var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+// If deployed, use the deployed database. Otherwise use the local newsapp database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsapp";
+
+// Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/newsapp");
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
+
 
 
 app.get("/", (req, res) => {
     res.render("index")
 });
 
-
-app.get("/scrape", (req, res) => {
-    request("https://www.vox.com/", (error, res, html) => {
-        var $ = cheerio.load(html);
-        var result = {};
-        
-        $("h2").each(function (i, element) {
-
-            result.title = $(this).children("a").text();
-            result.summary = $(this).children("p").text();
-            result.link = $(this).children("a").attr("href");
-            
-            db.Article.create(result)
-                .then(function (dbArticle) {
-                    console.log(dbArticle);
-                })
-                .catch(function (err) {
-                    return res.json(err);
-                });
-        });
-        console.log(result);
-    });
-    res.send("Scrape Complete")
+app.get("/saved", (req, res) => {
+    res.render("saved")
 });
+
+
+    app.get("/scrape", (req, res) => {
+        request("https://www.vox.com/", (error, res, html) => {
+            var $ = cheerio.load(html);
+            var result = {};
+            
+            $("h2").each(function (i, element) {
+    
+                result.title = $(this).children("a").text();
+                result.summary = $(this).children("p").text();
+                result.link = $(this).children("a").attr("href");
+                
+                db.Article.create(result)
+                    .then(function (dbArticle) {
+                        console.log(dbArticle);
+                    })
+                    .catch(function (err) {
+                        return res.json(err);
+                    });
+            });
+            console.log(result);
+        });
+        res.send("Scrape Complete")
+    });
+
+
 
 app.get("/articles", (req, res) => {
     db.Article.find({})

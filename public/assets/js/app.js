@@ -1,12 +1,23 @@
 $.getJSON("/articles", (data) => {
     for (i = 0; i < data.length; i++) {
-        $("#card-body").append("<p data-id='"
+        $("#articles").append(
+        // "<div class='card' data-id=" + data[i]._id + ">"+
+        // "<div class='card-header'>" + data[i].title + 
+        // "<a class = 'btn btn-success' data-id=" + data[i]._id + "> Save </button>" + "</a>"+
+        // "</div>"+
+        // "<div class='card-body'>"+
+        // "<p class='card-text'>" + data[i].summary + "<br />" +data[i].link + "<br />" +
+        // "</p>"+
+        // "</div>"+
+        // "</div>"
+            "<p data-id='"
             + data[i]._id + "'>"
             + data[i].title + 
-            "<button class = 'btn btn-success' data-id=" + data[i]._id + "> Save </button>" + "<br />"
+            "<button class = 'btn btn-success' id='save-article' data-id=" + data[i]._id + "> Save </button>" + "<br />"
             + data[i].summary + "<br />"
             + data[i].link +
-            "</p>");
+            "</p>"
+        );
     }
 });
 
@@ -68,4 +79,25 @@ $(document).on("click", "#savenote", function() {
     $("#titleinput").val("");
     $("#bodyinput").val("");
   });
+
+$("#save-article").on("click", function(){
+      var thisId = $(this).attr("data-id");
+      var title = $(this).attr(data[i].title);
+      var sum = $(this).attr(data[i].summary);
+      var link = $(this).attr(data[i].link);
+
+      $.ajax({
+          method: "POST",
+          url: "/save/" + thisId,
+            data: {
+                id: thisId,
+                title: title,
+                summary: summary,
+                link: link
+            }
+            
+      });
+      
+      
+})
   
